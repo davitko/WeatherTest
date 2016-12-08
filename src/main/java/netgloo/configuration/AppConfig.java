@@ -27,26 +27,26 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 public class AppConfig extends WebMvcConfigurerAdapter {
 
-//	@Bean
-//	public ViewResolver getViewResolver() {
-//		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-//		resolver.setPrefix("/WEB-INF/jsp/");
-//		resolver.setSuffix(".jsp");
-//		return resolver;
-//	}
-//
-//	@Override
-//	public void addInterceptors(InterceptorRegistry registry) {
-//		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-//		interceptor.setParamName("language");
-//		registry.addInterceptor(interceptor);
-//	}
-//
-//	@Override
-//	public void configureDefaultServletHandling(
-//			DefaultServletHandlerConfigurer configurer) {
-//		configurer.enable();
-//	} 
+	@Bean
+	public ViewResolver getViewResolver() {
+		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+		resolver.setPrefix("/WEB-INF/jsp/");
+		resolver.setSuffix(".jsp");
+		return resolver;
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+		interceptor.setParamName("language");
+		registry.addInterceptor(interceptor);
+	}
+
+	@Override
+	public void configureDefaultServletHandling(
+			DefaultServletHandlerConfigurer configurer) {
+		configurer.enable();
+	} 
 //
 //	@Bean(name = "dataSource")
 //	public DriverManagerDataSource dataSource() {
@@ -67,15 +67,15 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 //		messageSource.setDefaultEncoding("UTF-8");
 //		return messageSource;
 //	}
-//	@Bean
-//	public LocaleResolver localeResolver(){
-//		CookieLocaleResolver resolver = new CookieLocaleResolver();
-//		resolver.setDefaultLocale(new Locale("en"));
-//		resolver.setCookieName("myLocaleCookie");
-//		resolver.setCookieMaxAge(4800);
-//		return resolver;
-//		//		    }
-//	}
+	@Bean
+	public LocaleResolver localeResolver(){
+		CookieLocaleResolver resolver = new CookieLocaleResolver();
+		resolver.setDefaultLocale(new Locale("en"));
+		resolver.setCookieName("myLocaleCookie");
+		resolver.setCookieMaxAge(4800);
+		return resolver;
+		//		    }
+	}
 	
 //	@Bean
 //	public DataSource dataSource() {

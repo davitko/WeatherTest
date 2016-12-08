@@ -26,7 +26,7 @@ public class City implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	long id;
 	String name;
-	long serverid;
+	Double serverid;
 	String country;
 	String temperature;
 	String humidity;
@@ -44,7 +44,7 @@ public class City implements Serializable{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public City(String name, long serverid, String country, String temperature, String humidity, String pressure,
+	public City(String name, Double serverid, String country, String temperature, String humidity, String pressure,
 			String visibility, String wind_speed, Double sunrise, Double sunset, Double longitude, Double latitude,
 			Boolean deleted) {
 		super();
@@ -78,10 +78,10 @@ public class City implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public long getServerid() {
+	public Double getServerid() {
 		return serverid;
 	}
-	public void setServerid(long serverid) {
+	public void setServerid(Double serverid) {
 		this.serverid = serverid;
 	}
 	public String getCountry() {
@@ -149,6 +149,13 @@ public class City implements Serializable{
 	}
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
+	}
+	@Override
+	public String toString() {
+		return "City [id=" + id + ", name=" + name + ", serverid=" + serverid + ", country=" + country
+				+ ", temperature=" + temperature + ", humidity=" + humidity + ", pressure=" + pressure + ", visibility="
+				+ visibility + ", wind_speed=" + wind_speed + ", sunrise=" + sunrise + ", sunset=" + sunset
+				+ ", longitude=" + longitude + ", latitude=" + latitude + ", deleted=" + deleted + "]";
 	}
 	
 	

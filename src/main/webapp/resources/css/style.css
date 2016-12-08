@@ -1,0 +1,63 @@
+body {
+    /*    text-align: center;*/
+    overflow: hidden;
+}
+
+.container-fluid {
+    z-index: 1;
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    max-height: 70%;
+    overflow: auto;
+    background: rgba(255, 255, 255, 0.7);
+    width: 80%;
+    padding: 10px;
+    color: black;
+    overflow: hidden;
+}
+
+.title {
+    position: absolute;
+    top: 5px;
+    width: 100%;
+}
+
+.title h1 {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    color: #f2f2f2;
+    /*    background: #ff4a4a;*/
+    font-size: 30px;
+    line-height: 31px;
+    font-weight: 700;
+    /*    margin: 0 5px 24px;*/
+    float: left;
+    padding: 10px;
+    /*    margin: 0 5px 24px;*/
+    font-family: 'Libre Baskerville', serif;
+}
+
+.addCity {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.delimiter {
+    height: 20px;
+    width: auto;
+    background-image: url(../img/line.png);
+    background-size: contain;
+    margin: 10px 0;
+}
+
+.btn-addCity {
+    background: rgba(240, 240, 240, 0.8);
+}
+
+footer {
+    position: fixed;
+    right: 10px;
+    bottom: 2px;
+    color: white;
+}

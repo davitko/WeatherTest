@@ -47,12 +47,26 @@ public class CityServices {
 	
 	@RequestMapping("/create")
 	@ResponseBody
-	public String create(String name, long serverid, String country, String temperature, String humidity, String pressure,
+	public String create(String name, Double serverid, String country, String temperature, String humidity, String pressure,
 			String visibility, String wind_speed, Double sunrise, Double sunset, Double longitude, Double latitude,
 			Boolean deleted) {
 		City object = new City();
 		try {
 			object = new City(name, serverid, country, temperature, humidity, pressure, visibility, wind_speed, sunrise, sunset, longitude, latitude, deleted);
+			cityRepository.save(object);
+		}
+		catch (Exception ex) {
+			return "Error creating the new City: " + ex.toString();
+		}
+		return "User succesfully created new City! (id = " + object.getId() + ")";
+	}
+	
+	@RequestMapping("/createObject")
+	@ResponseBody
+	public String create(City tmpCity) {
+		City object = new City();
+		try {
+			object = tmpCity;
 			cityRepository.save(object);
 		}
 		catch (Exception ex) {
@@ -76,7 +90,7 @@ public class CityServices {
 
 	@RequestMapping("/update")
 	@ResponseBody
-	public String updateCity(long id, String name, long serverid, String country, String temperature, String humidity, String pressure,
+	public String updateCity(long id, String name, Double serverid, String country, String temperature, String humidity, String pressure,
 			String visibility, String wind_speed, Double sunrise, Double sunset, Double longitude, Double latitude,
 			Boolean deleted) {
 		try {
