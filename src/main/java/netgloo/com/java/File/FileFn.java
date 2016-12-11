@@ -1,5 +1,6 @@
 package netgloo.com.java.File;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +18,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -691,7 +693,7 @@ public class FileFn {
 		// Create directory now.
 		d.mkdirs();
 	}
-	
+
 	/**
 	 * 
 	 * @param folderName - "/tmp", "/tmp/test" 
@@ -699,26 +701,123 @@ public class FileFn {
 	 */
 	public String[] ReadFolder(String folderName) {
 		File file = null;
-	    String[] paths = null;
-	  
-	      try {      
-	         // create new file object
-	         file = new File(folderName);
+		String[] paths = null;
 
-	         // array of files and directory
-	         paths = file.list();
+		try {      
+			// create new file object
+			file = new File(folderName);
 
-	         // for each name in the path array
-	         for(String path:paths) {
-	            // prints filename and directory name
-	            System.out.println(path);
-	         }
-	      }catch(Exception e) {
-	         // if any error occurs
-	         e.printStackTrace();
-	      }
-	      
-	      return paths;
+			// array of files and directory
+			paths = file.list();
+
+			// for each name in the path array
+			for(String path:paths) {
+				// prints filename and directory name
+				System.out.println(path);
+			}
+		}catch(Exception e) {
+			// if any error occurs
+			e.printStackTrace();
+		}
+
+		return paths;
+	}
+
+	/**
+	 * 
+	 * @param fileName - country.csv
+	 * @param cvsSplitBy - ",", "\t"
+	 * @param columnNumber - 1
+	 * @return
+	 * @throws IOException
+	 */
+	public List<String> CSVReaderByColumn(String fileName, String cvsSplitBy, Integer columnNumber) throws IOException {
+
+		String csvFile = findFilePath(fileName).toString();
+		String line = "";
+		List<String> header = new ArrayList<String>();;
+		List<String> data = new ArrayList<String>();
+		List<String> result = new ArrayList<String>();
+		//        String cvsSplitBy = ",";
+
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] lines = line.split(cvsSplitBy);
+				if (header.isEmpty()) {
+					//                	header = new ArrayList<String>(); 
+					for (String str : lines) {
+						header.add(str);
+					}
+				}
+				else {
+					for (String str : lines) {
+						data.add(str);
+					}
+				}
+
+
+				//                System.out.println("Country [code= " + country[4] + " , name=" + country[5] + "]");
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Integer indexOfData = columnNumber;
+		for (int i = 0; i < data.size() - header.size(); i += header.size()) {
+			result.add(data.get(indexOfData));
+			indexOfData += header.size();
+		}
+
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param fileName
+	 * @param cvsSplitBy
+	 * @param wantedString
+	 * @return
+	 * @throws IOException
+	 */
+	public Boolean CSVReaderIsStringExist(String fileName, String cvsSplitBy, String wantedString) throws IOException {
+
+		String csvFile = findFilePath(fileName).toString();
+		String line = "";
+		List<String> header = new ArrayList<String>();;
+		//		List<String> data = new ArrayList<String>();
+		//		List<String> result = new ArrayList<String>();
+		//        String cvsSplitBy = ",";
+
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] lines = line.split(cvsSplitBy);
+				if (header.isEmpty()) {
+					//                	header = new ArrayList<String>(); 
+					for (String str : lines) {
+						header.add(str);
+					}
+				}
+				else {
+					for (String str : lines) {
+						if (str.equals(wantedString))
+							return true;
+						//                		data.add(str);
+					}
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
 

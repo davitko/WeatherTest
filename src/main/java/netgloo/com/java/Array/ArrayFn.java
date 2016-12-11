@@ -1,14 +1,19 @@
 package netgloo.com.java.Array;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Controller;
@@ -184,6 +189,145 @@ public class ArrayFn {
 	    return list;
 	}
 
+	public List<String> MapToList(Map<Integer, String> map) {
+		List<Integer> result = map.entrySet().stream()
+                .map(x -> x.getKey())
+                .collect(Collectors.toList());
+
+        result.forEach(System.out::println);
+
+        System.out.println("\n2. Export Map Value to List...");
+
+        List<String> result2 = map.entrySet().stream()
+                .map(x -> x.getValue())
+                .collect(Collectors.toList());
+
+        result2.forEach(System.out::println);
+        
+        return result2;
+	}
+	
+	public List<Integer> ArrayToList(int[] numbers) {
+		List<Integer> list = Arrays.stream(numbers).boxed().collect(Collectors.toList());
+        System.out.println("list : " + list);
+        return list;
+	}
+	
+	public <T> T[] joinArray(T[]... arrays) {
+        int length = 0;
+        for (T[] array : arrays) {
+            length += array.length;
+        }
+
+        //T[] result = new T[length];
+        final T[] result = (T[]) Array.newInstance(arrays[0].getClass().getComponentType(), length);
+
+        int offset = 0;
+        for (T[] array : arrays) {
+            System.arraycopy(array, 0, result, offset, array.length);
+            offset += array.length;
+        }
+
+        return result;
+    }
+	
+	public String MapFilterByValue(Map<Integer, String> map, String wantedString) {
+		String result = "";
+		//Map -> Stream -> Filter -> String
+        result = map.entrySet().stream()
+                .filter(tmpMap -> wantedString.equals(tmpMap.getValue()))
+                .map(tmpMap -> tmpMap.getValue())
+                .collect(Collectors.joining());
+
+        System.out.println("With Java 8 : " + result);
+        return result;
+	}
+	
+	public Map<Integer, String> MapFilterByKey(Map<Integer, String> map, Integer key) {
+		//Map -> Stream -> Filter -> String
+		Map<Integer, String> collect = map.entrySet().stream()
+        		.filter(tmpMap -> tmpMap.getKey() == key)
+                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+
+		System.out.println(collect);
+        return collect;
+	}
+	
+	public Map<String, Integer> SortMapByKey(Map<String, Integer> unsortMap) {
+		Map<String, Integer> result = new LinkedHashMap<>();
+
+        //sort by key, a,b,c..., and put it into the "result" map
+        unsortMap.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByKey())
+                .forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
+
+        System.out.println("Sorted...");
+        System.out.println(result);
+        return result;
+	}
+	
+	public Map<String, Integer> SortMapByValue(Map<String, Integer> unsortMap) {
+		Map<String, Integer> result = new LinkedHashMap<>();
+
+        //sort by value, and reserve, 10,9,8,7,6...
+        unsortMap.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
+
+        System.out.println("Sorted...");
+        System.out.println(result);
+        return result;
+	}
+	
+	/**
+	 * Map<String, Integer> unsortMap = new HashMap<>();
+        unsortMap.put("z", 10);
+        unsortMap.put("b", 5);
+        ...
+        
+        System.out.println("Sort By Key...");
+        Map<String, Integer> resultKey = compareByKey(unsortMap);
+        System.out.println(resultKey);
+	 * @param map
+	 * @return
+	 */
+	//Reference from java.util.Map source code, try dig inside, many generic examples.
+    public <K, V extends Comparable<? super V>> Map<K, V> compareByValue(Map<K, V> map) {
+
+        Map<K, V> result = new LinkedHashMap<>();
+
+        Stream<Map.Entry<K, V>> mapInStream = map.entrySet().stream();
+
+        mapInStream.sorted(Map.Entry.comparingByValue())
+                .forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
+
+        return result;
+
+    }
+
+    /**
+     * Map<String, Integer> unsortMap = new HashMap<>();
+        unsortMap.put("z", 10);
+        unsortMap.put("b", 5);
+        ...
+        
+        System.out.println("Sort By Value...");
+        Map<String, Integer> resultValue = compareByValue(unsortMap);
+        System.out.println(resultValue);
+     * @param map
+     * @return
+     */
+    public <K extends Comparable<? super K>, V> Map<K, V> compareByKey(Map<K, V> map) {
+
+        Map<K, V> result = new LinkedHashMap<>();
+        Stream<Map.Entry<K, V>> mapInStream = map.entrySet().stream();
+
+        mapInStream.sorted(Map.Entry.comparingByKey())
+                .forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
+
+        return result;
+
+    }
 
 
 

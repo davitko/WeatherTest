@@ -2,6 +2,7 @@ package netgloo.com.java.Integer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 
 import org.springframework.stereotype.Controller;
@@ -51,6 +52,16 @@ public class IntegerFn {
 	
 	public List<Integer> greaterThenNumbers(List<Integer> list, Integer number) {
 		return eval(list, n-> n > number );
+	}
+	
+	private int getRandomNumberInRange(int min, int max) {
+
+		if (min >= max) {
+			throw new IllegalArgumentException("max must be greater than min");
+		}
+
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
 	}
 	
 	

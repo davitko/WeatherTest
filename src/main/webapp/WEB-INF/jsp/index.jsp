@@ -1,5 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -19,7 +20,8 @@
 	rel="stylesheet">
 
 <!-- Bootstrap Core CSS -->
-<link href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css"
+<link
+	href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css"
 	rel="stylesheet">
 
 <!-- Table CSS -->
@@ -96,14 +98,28 @@
 	<!-- Page Content -->
 	<div class="container-fluid ">
 		<div class="addCity animated bounceIn">
-			<div class="row ">
-				<div
-					class="col-lg-2 col-lg-offset-5 col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
-					<!-- Indicates a successful or positive action -->
-					<a href="<%=request.getContextPath()%>/addCity"><button type="button" class="btn btn-default btn-lg btn-addCity">Add
-						City</button></a>
+			<div class="row">
+				<div class="col-lg-12">
+					<form action="#" th:action="@{/addCity/add}"
+						th:object="${city}" method="post">
+						<p>
+							Name: <input type="text" th:field="*{name}"
+								placeholder="City Name" />
+						</p>
+
+						
+							<input type="submit" value="add"class="btn btn-default btn-lg btn-addCity" /> 
+<!-- 							<input type="reset" -->
+<!-- 								value="add" /> -->
+						
+					</form>
 				</div>
 			</div>
+
+
+
+
+
 		</div>
 		<div class="delimiter">
 			<div class="row ">
@@ -114,7 +130,7 @@
 			</div>
 		</div>
 		<div class="table-responsive">
-			<div class="row">
+			<div class="row table-row">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<table id="example"
 						class="table table-bordered table-striped table-condensed table-hover"
@@ -136,18 +152,14 @@
 							</tr>
 						</tfoot>
 						<tbody>
-							<tr>
-								<td>London</td>
-								<td>22.5 C</td>
-								<td>105</td>
-								<td>50</td>
-							</tr>
-							<tr>
-								<td>Munich</td>
-								<td>22.5 C</td>
-								<td>105</td>
-								<td>50</td>
-							</tr>
+							<c:forEach items="${cities}" var="city">
+								<tr>
+									<td>${city.name}</td>
+									<td>${city.temperature}</td>
+									<td>${city.humidity}</td>
+									<td>${city.pressure}</td>
+								</tr>
+							</c:forEach>    
 						</tbody>
 					</table>
 				</div>
@@ -184,13 +196,14 @@
 
 	<!-- Script to Activate the Carousel -->
 	<script>
-        $(document).ready(function () {
-            $('#example').DataTable();
-        });
-        $('.carousel').carousel({
-            interval: 3000 //changes the speed
-        })
-    </script>
+		$(document).ready(function() {
+			$('#example').DataTable();
+		});
+		$('.carousel').carousel({
+			interval : 3000
+		//changes the speed
+		})
+	</script>
 
 
 

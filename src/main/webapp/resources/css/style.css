@@ -55,6 +55,16 @@ body {
     background: rgba(240, 240, 240, 0.8);
 }
 
+.table-responsive {
+	max-height: 350px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.table-row {
+/* 	max-width: 100%; */
+}
+
 footer {
     position: fixed;
     right: 10px;

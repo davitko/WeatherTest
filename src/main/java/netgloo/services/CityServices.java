@@ -37,6 +37,14 @@ public class CityServices {
 		return listOfAll;
 	}
 	
+	@RequestMapping("/Count")
+	@ResponseBody
+	public Integer count() {
+		List<City> listOfAll = new ArrayList<City>();
+		listOfAll = arrayFn.IterableToList(cityRepository.findAll());
+		return listOfAll.size();
+	}
+	
 	@RequestMapping("/name")
 	@ResponseBody
 	public City findByName(String name) {
@@ -129,6 +137,22 @@ public class CityServices {
 			return "Error updating the City: " + ex.toString();
 		}
 		return "City succesfully updated!";
+	}
+	
+	@RequestMapping("/isExistByName")
+	@ResponseBody
+	public boolean isExistByName(String name) {
+		City object = null;
+		try {
+			object = cityRepository.findByName(name);
+			if (object == null)
+				return false;
+			else 
+				return true;
+		}
+		catch (Exception ex) {
+			return false;
+		}
 	}
 
 }

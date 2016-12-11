@@ -37,6 +37,7 @@ public class City implements Serializable{
 	Double sunset;
 	Double longitude;
 	Double latitude;
+	long dateTime;
 	Boolean deleted;
 	
 	
@@ -144,6 +145,12 @@ public class City implements Serializable{
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
+	public long getDateTime() {
+		return dateTime;
+	}
+	public void setDateTime(long dateTime) {
+		this.dateTime = dateTime;
+	}
 	public Boolean getDeleted() {
 		return deleted;
 	}
@@ -155,8 +162,10 @@ public class City implements Serializable{
 		return "City [id=" + id + ", name=" + name + ", serverid=" + serverid + ", country=" + country
 				+ ", temperature=" + temperature + ", humidity=" + humidity + ", pressure=" + pressure + ", visibility="
 				+ visibility + ", wind_speed=" + wind_speed + ", sunrise=" + sunrise + ", sunset=" + sunset
-				+ ", longitude=" + longitude + ", latitude=" + latitude + ", deleted=" + deleted + "]";
+				+ ", longitude=" + longitude + ", latitude=" + latitude + ", dateTime=" + dateTime + ", deleted="
+				+ deleted + "]";
 	}
+	
 	
 	
 	
