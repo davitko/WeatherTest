@@ -54,8 +54,7 @@ public class IntegerFn {
 		return eval(list, n-> n > number );
 	}
 	
-	private int getRandomNumberInRange(int min, int max) {
-
+	public int getRandomNumberInRange(int min, int max) {
 		if (min >= max) {
 			throw new IllegalArgumentException("max must be greater than min");
 		}
@@ -64,6 +63,4 @@ public class IntegerFn {
 		return r.nextInt((max - min) + 1) + min;
 	}
 	
-	
-
 }

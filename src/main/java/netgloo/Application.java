@@ -9,6 +9,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import netgloo.services.FillApp;
+
 /*
  * The @SpringBootApplication annotation is equivalent to using 
  * @Configuration, @EnableAutoConfiguration and @ComponentScan with their default attributes:
@@ -34,8 +36,8 @@ public class Application extends SpringBootServletInitializer{
 	  ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
     
     try {
-//    	context.getBean(FillDataBase.class).fillNodes();
-//		context.getBean(FillDataBase.class).fillRoads();
+    	context.getBean(FillApp.class).fillImgUrls();
+		context.getBean(FillApp.class).fillCarouselImg();
 //		context.getBean(FillDataBase.class).fillCar();
 
 	}catch (Exception e) {

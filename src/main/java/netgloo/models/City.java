@@ -37,7 +37,7 @@ public class City implements Serializable{
 	Double sunset;
 	Double longitude;
 	Double latitude;
-	long dateTime;
+	Double dateTime;
 	Boolean deleted;
 	
 	
@@ -145,10 +145,10 @@ public class City implements Serializable{
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
-	public long getDateTime() {
+	public Double getDateTime() {
 		return dateTime;
 	}
-	public void setDateTime(long dateTime) {
+	public void setDateTime(Double dateTime) {
 		this.dateTime = dateTime;
 	}
 	public Boolean getDeleted() {

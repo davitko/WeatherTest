@@ -45,6 +45,23 @@ public class CityServices {
 		return listOfAll.size();
 	}
 	
+	@RequestMapping("/getLast")
+	@ResponseBody
+	public City getLast() {
+		List<City> listOfAll = new ArrayList<City>();
+		listOfAll = arrayFn.IterableToList(cityRepository.findAll());
+		City lastCity = listOfAll.get(listOfAll.size() - 1);
+		return lastCity;
+	}
+	
+	@RequestMapping("/id")
+	@ResponseBody
+	public City findById(long id) {
+		City object = new City();
+		object = cityRepository.findOne(id);
+		return object;
+	}
+	
 	@RequestMapping("/name")
 	@ResponseBody
 	public City findByName(String name) {

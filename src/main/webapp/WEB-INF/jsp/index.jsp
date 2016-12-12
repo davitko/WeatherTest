@@ -1,7 +1,9 @@
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="weather-background-hide" value="${weatherBg.display}" />
+<c:set var="weather-background-img" value="${weatherBg.url}" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -17,6 +19,12 @@
 
 <!--    Font -->
 <link href="https://fonts.googleapis.com/css?family=Roboto"
+	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Aref+Ruqaa"
+	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Fjalla+One"
+	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Dosis"
 	rel="stylesheet">
 
 <!-- Bootstrap Core CSS -->
@@ -36,6 +44,10 @@
 
 <!--    Animate.css-->
 <link href="${contextPath}/resources/css/animate.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="<%=request.getContextPath()%>/resources/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+
 <title>Insert title here</title>
 </head>
 <body>
@@ -45,7 +57,7 @@
 		<div class="item active animated ">
 			<!-- Set the first background image using inline CSS below. -->
 			<div class="fill"
-				style="background-image: url('${contextPath}/resources/img/carousel/summer/summer1.jpg');"></div>
+				style="background-image: url('${contextPath}/resources/img/carousel/carouselPack<c:out value="${carouselPack.index}"/>/<c:out value="${carouselPack.summer}"/>');"></div>
 			<!--
             <div class="carousel-caption">
     <h2>Summer</h2>
@@ -55,7 +67,7 @@
 		<div class="item animated ">
 			<!-- Set the second background image using inline CSS below. -->
 			<div class="fill"
-				style="background-image: url('${contextPath}/resources/img/carousel/autumn/autumn1.jpg');"></div>
+				style="background-image: url('${contextPath}/resources/img/carousel/carouselPack<c:out value="${carouselPack.index}"/>/<c:out value="${carouselPack.autumn}"/>');"></div>
 			<!--
                 <div class="carousel-caption">
                     <h2>Autumn</h2>
@@ -65,7 +77,7 @@
 		<div class="item">
 			<!-- Set the third background image using inline CSS below. -->
 			<div class="fill"
-				style="background-image: url('${contextPath}/resources/img/carousel/winter/winter1.jpg');"></div>
+				style="background-image: url('${contextPath}/resources/img/carousel/carouselPack<c:out value="${carouselPack.index}"/>/<c:out value="${carouselPack.winter}"/>');"></div>
 			<!--
                 <div class="carousel-caption">
                     <h2>Winter</h2>
@@ -75,7 +87,7 @@
 		<div class="item">
 			<!-- Set the third background image using inline CSS below. -->
 			<div class="fill"
-				style="background-image: url('${contextPath}/resources/img/carousel/spring/spring1.jpg');"></div>
+				style="background-image: url('${contextPath}/resources/img/carousel/carouselPack<c:out value="${carouselPack.index}"/>/<c:out value="${carouselPack.spring}"/>');"></div>
 			<!--
                 <div class="carousel-caption">
                     <h2>Spring</h2>
@@ -83,8 +95,17 @@
 -->
 		</div>
 	</div>
-
 	</header>
+
+	<div class="weather-background animated fadeIn">
+		<%--          <c:out value="${weatherBg.display}"--%>
+		<%--          <c:out value="${'weather-background-hide'}"/> --%>
+		<%--          <%= request.getParameter("weather-background-hide") %> --%>
+
+		<div class="fill <c:out value="${weatherBg.display}" />"
+			style="background-image:url('${contextPath}/resources/img/weather/<c:out value="${weatherBg.url}" />');"></div>
+
+	</div>
 
 	<div class="title animated bounceIn">
 		<div class="row ">
@@ -95,24 +116,56 @@
 		</div>
 	</div>
 
+<!-- 	<div class="informations animated bounceIn"> -->
+<!-- 		<div class="row "> -->
+<!-- 			<div class="col-lg-2 col-md-4 col-sm-6"> -->
+<!-- 				<div class="title-temperature animated bounceIn"> -->
+<!-- 					<p>4 &#8451;</p> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="col-lg-2 col-md-4 col-sm-6"> -->
+<!-- 				<div class="title-cityName animated bounceIn"> -->
+<!-- 					<p>Berlin</p> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="col-lg-2 col-md-4 col-sm-6"> -->
+<!-- 				<div class="title-time animated bounceIn"> -->
+<!-- 					<p>03 a.m.</p> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+
 	<!-- Page Content -->
 	<div class="container-fluid ">
 		<div class="addCity animated bounceIn">
 			<div class="row">
-				<div class="col-lg-12">
-					<form action="#" th:action="@{/addCity/add}"
-						th:object="${city}" method="post">
-						<p>
-							Name: <input type="text" th:field="*{name}"
-								placeholder="City Name" />
-						</p>
-
-						
-							<input type="submit" value="add"class="btn btn-default btn-lg btn-addCity" /> 
-<!-- 							<input type="reset" -->
-<!-- 								value="add" /> -->
-						
+				<div class="col-lg-12 col-md-12 ">
+					<c:url var="addAction" value="/add"></c:url>
+					<%-- <form:form action="${addAction}" commandName="warehouse" method="POST"> --%>
+<!-- 					<form role="form" -->
+<%-- 						action="${addAction}?${_csrf.parameterName}=${_csrf.token}" --%>
+<!-- 						commandName="city" method="POST"> -->
+						<form role="form" action="${addAction}"commandName="city" method="POST">
+						<div class="row">
+							<div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-12">
+								<div class="form-group">
+									<%-- <form:input path="name" type="text" class="form-control addWarehouseStyle" id="message" placeholder="Naziv" />   --%>
+									<input class="form-control addWarehouseStyle" name="name"
+										id="message" placeholder="City Name" type="text"
+										value="${city.name}" />
+									<p class="help-block text-danger"></p>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-lg-12 text-center">
+								<div id="success"></div>
+								<input type="submit"
+									class="btn btn-xl submit-add addWarehouseStyle" value="add" />
+							</div>
+						</div>
 					</form>
+
 				</div>
 			</div>
 
@@ -141,6 +194,8 @@
 								<th>Temperature</th>
 								<th>Humidity</th>
 								<th>Pressure</th>
+								<th>Details</th>
+								<th>Remove</th>
 							</tr>
 						</thead>
 						<tfoot>
@@ -149,17 +204,30 @@
 								<th>Temperature</th>
 								<th>Humidity</th>
 								<th>Pressure</th>
+								<th>Details</th>
+								<th>Remove</th>
 							</tr>
 						</tfoot>
 						<tbody>
 							<c:forEach items="${cities}" var="city">
 								<tr>
 									<td>${city.name}</td>
-									<td>${city.temperature}</td>
-									<td>${city.humidity}</td>
-									<td>${city.pressure}</td>
+									<td>${city.temperature}&#8451;</td>
+									<td>${city.humidity}%</td>
+									<td>${city.pressure}mb</td>
+									<td><a href="<c:url value="/details/${city.id}" />"><button
+												type="button" class="btn btn-success" aria-haspopup="true"
+												aria-expanded="false">
+												<i class="fa fa-info"></i>
+											</button></a></td>
+									<td><a
+										href="<c:url value="/remove/${city.id}" />"><button
+												type="button" class="btn btn-danger " aria-haspopup="true"
+												aria-expanded="false">
+												<i class="fa fa-trash-o"></i>
+											</button></a></td>
 								</tr>
-							</c:forEach>    
+							</c:forEach>
 						</tbody>
 					</table>
 				</div>
@@ -200,7 +268,7 @@
 			$('#example').DataTable();
 		});
 		$('.carousel').carousel({
-			interval : 3000
+			interval : 10000
 		//changes the speed
 		})
 	</script>

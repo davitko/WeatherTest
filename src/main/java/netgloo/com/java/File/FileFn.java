@@ -767,12 +767,120 @@ public class FileFn {
 			e.printStackTrace();
 		}
 
-		Integer indexOfData = columnNumber;
-		for (int i = 0; i < data.size() - header.size(); i += header.size()) {
-			result.add(data.get(indexOfData));
-			indexOfData += header.size();
+		Integer indexOfColumn = columnNumber;
+		if (indexOfColumn > header.size() || indexOfColumn < 0) {
+			System.out.println("Number of columns is: " + header.size() + " but you wanted: " + indexOfColumn);
+		}else {
+			for (int i = 0; i < data.size() - header.size(); i += header.size()) {
+				result.add(data.get(indexOfColumn));
+				indexOfColumn += header.size();
+			}
+		}
+		return result;
+	}
+	
+	public List<String> CSVReaderByColumnName(String fileName, String cvsSplitBy, String columnName) throws IOException {
+
+		String csvFile = findFilePath(fileName).toString();
+		String line = "";
+		List<String> header = new ArrayList<String>();;
+		List<String> data = new ArrayList<String>();
+		List<String> result = new ArrayList<String>();
+		//        String cvsSplitBy = ",";
+
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] lines = line.split(cvsSplitBy);
+				if (header.isEmpty()) {
+					//                	header = new ArrayList<String>(); 
+					for (String str : lines) {
+						header.add(str);
+					}
+				}
+				else {
+					for (String str : lines) {
+						data.add(str);
+					}
+				}
+
+
+				//                System.out.println("Country [code= " + country[4] + " , name=" + country[5] + "]");
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
+//		Integer indexOfColumn;
+//		
+//		try {
+//			indexOfColumn = header.indexOf(columnName);
+//		}
+		
+		Integer indexOfColumn = header.indexOf(columnName);
+		if (indexOfColumn > header.size() || indexOfColumn < 0) {
+			System.out.println("Number of columns is: " + header.size() + " but you wanted: " + indexOfColumn);
+		}else {
+			for (int i = 0; i < data.size() - header.size(); i += header.size()) {
+				result.add(data.get(indexOfColumn));
+				indexOfColumn += header.size();
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param fileName
+	 * @param cvsSplitBy
+	 * @param rowNumber - First row is have zero index, row Number can be: 0, 1, 2...
+	 * @return
+	 * @throws IOException
+	 */
+	public List<String> CSVReaderByRow(String fileName, String cvsSplitBy, Integer rowNumber) throws IOException {
+
+		String csvFile = findFilePath(fileName).toString();
+		String line = "";
+		List<String> header = new ArrayList<String>();;
+		List<String> data = new ArrayList<String>();
+		List<String> result = new ArrayList<String>();
+		//        String cvsSplitBy = ",";
+
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] lines = line.split(cvsSplitBy);
+				if (header.isEmpty()) {
+					//                	header = new ArrayList<String>(); 
+					for (String str : lines) {
+						header.add(str);
+					}
+				}
+				else {
+					for (String str : lines) {
+						data.add(str);
+					}
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Integer indexOfRow = rowNumber * header.size();
+		if (rowNumber > data.size() || rowNumber < 0) {
+			System.out.println("Number of rows is: " + data.size() + " but you wanted: " + rowNumber);
+		}else {
+			for (int i = indexOfRow; i < indexOfRow + header.size(); i++) {
+				result.add(data.get(i));
+			}
+		}
 		return result;
 	}
 
