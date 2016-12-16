@@ -37,6 +37,24 @@ public class CityServices {
 		return listOfAll;
 	}
 	
+	/**
+	 * Find all city which is not Soft deleted
+	 * @return
+	 */
+	@RequestMapping("/allSoft")
+	@ResponseBody
+	public List<City> findAllSoft() {
+		List<City> listOfAll = new ArrayList<City>();
+		listOfAll = arrayFn.IterableToList(cityRepository.findAll());
+		List<City> result = new ArrayList<City>();
+		for (City ct : listOfAll) {
+			if (!ct.getDeleted()) {
+				result.add(ct);
+			}
+		}
+		return result;
+	}
+	
 	@RequestMapping("/Count")
 	@ResponseBody
 	public Integer count() {
@@ -104,8 +122,22 @@ public class CityServices {
 	@ResponseBody
 	public String delete(long id) {
 		try {
-			City object = new City(id);
+			City object = cityRepository.findOne(id);
 			cityRepository.delete(object);
+		}
+		catch (Exception ex) {
+			return "Error deleting the City: " + ex.toString();
+		}
+		return "City succesfully deleted!";
+	}
+	
+	@RequestMapping("/softDelete")
+	@ResponseBody
+	public String softDelete(long id) {
+		try {
+			City object = cityRepository.findOne(id);
+			object.setDeleted(true);
+			cityRepository.save(object);
 		}
 		catch (Exception ex) {
 			return "Error deleting the City: " + ex.toString();
@@ -133,7 +165,6 @@ public class CityServices {
 			object.setLatitude(latitude);
 			object.setLongitude(longitude);
 			object.setDeleted(deleted);
-		
 			cityRepository.save(object);
 		}
 		catch (Exception ex) {
@@ -142,11 +173,52 @@ public class CityServices {
 		return "City succesfully updated!";
 	}
 	
-	@RequestMapping("/update/deleted")
+	@RequestMapping("/updateCity")
+	@ResponseBody
+	public String updateCity(City city) {
+		try {
+			City object = new City();
+			object = cityRepository.findOne(city.getId());
+			object.setName(city.getName());
+			object.setServerid(city.getServerid());
+			object.setCountry(city.getCountry());
+			object.setTemperature(city.getTemperature());
+			object.setHumidity(city.getHumidity());
+			object.setPressure(city.getPressure());
+			object.setVisibility(city.getVisibility());
+			object.setWind_speed(city.getWind_speed());
+			object.setSunrise(city.getSunrise());
+			object.setSunset(city.getSunrise());
+			object.setLatitude(city.getLatitude());
+			object.setLongitude(city.getLongitude());
+			object.setDeleted(city.getDeleted());
+			cityRepository.save(object);
+		}
+		catch (Exception ex) {
+			return "Error updating the City: " + ex.toString();
+		}
+		return "City succesfully updated!";
+	}
+	
+	@RequestMapping("/updateCity_Deleted")
 	@ResponseBody
 	public String updateCity_Deleted(String name, Boolean deleted) {
 		try {
 			City object = cityRepository.findByName(name);
+			object.setDeleted(deleted);
+			cityRepository.save(object);
+		}
+		catch (Exception ex) {
+			return "Error updating the City: " + ex.toString();
+		}
+		return "City succesfully updated!";
+	}
+	
+	@RequestMapping("/updateSoftDeleted")
+	@ResponseBody
+	public String updateCitySoftDeleted(long id, Boolean deleted) {
+		try {
+			City object = cityRepository.findOne(id);
 			object.setDeleted(deleted);
 			cityRepository.save(object);
 		}
@@ -166,6 +238,46 @@ public class CityServices {
 				return false;
 			else 
 				return true;
+		}
+		catch (Exception ex) {
+			return false;
+		}
+	}
+	
+	@RequestMapping("/isSoftDeletedByName")
+	@ResponseBody
+	public boolean isSoftDeleted(String name) {
+		City object = null;
+		try {
+			object = cityRepository.findByName(name);
+			if (object == null)
+				return false;
+			else 
+				if (object.getDeleted()) {
+					return true;
+				}else {
+					return false;
+				}
+		}
+		catch (Exception ex) {
+			return false;
+		}
+	}
+	
+	@RequestMapping("/isExistOrSoftDeletedByName")
+	@ResponseBody
+	public boolean isExistOrSoftDeletedByName(String name) {
+		City object = null;
+		try {
+			object = cityRepository.findByName(name);
+			if (object == null)
+				return false;
+			else 
+				if (object.getDeleted()) {
+					return true;
+				}else {
+					return false;
+				}
 		}
 		catch (Exception ex) {
 			return false;

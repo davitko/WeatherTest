@@ -47,44 +47,7 @@ public class FillApp {
 		 tags = "default,day,normal,fine";
 		 images.put(tags, tags + extension);
 		 
-		 
-		 // Berlin
-		 tags = "";
-		 tags = "Berlin,day,hot";
-		 images.put(tags, tags + extension);
-		 tags = "";
-		 tags = "Berlin,night,cold";
-		 images.put(tags, tags + extension);
-		 tags = "";
-		 tags = "Berlin,night,hot";
-		 images.put(tags, tags + extension);
-		 tags = "";
-		 tags = "Berlin,night,normal";
-		 images.put(tags, tags + extension);
-		 
-		 // London
-		 tags = "";
-		 tags = "London,night,normal";
-		 images.put(tags, tags + extension);
-//		 tags = "";
-//		 tags = "London,night,normal";
-//		 images.put(tags, tags + extension);
-//		 tags = "";
-//		 tags = "London,night,normal";
-//		 images.put(tags, tags + extension);
-		 
-		 // Belgrade
-		 tags = "";
-		 tags = "Belgrade,day,normal";
-		 images.put(tags, tags + extension);
-		 tags = "";
-		 tags = "Belgrade,night,cold";
-		 images.put(tags, tags + extension);
-		 tags = "";
-		 tags = "Belgrade,night,hot";
-		 images.put(tags, tags + extension);
-		 
-		// Amsterdam
+		 // Amsterdam
 		 tags = "";
 		 tags = "Amsterdam,day,cold";
 		 images.put(tags, tags + extension);
@@ -100,6 +63,141 @@ public class FillApp {
 		 tags = "";
 		 tags = "Amsterdam,night,normal";
 		 images.put(tags, tags + extension);
+		 //**********************************
+		 
+		// Belgrade
+		 tags = "";
+		 tags = "Belgrade,day,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Belgrade,day,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Belgrade,day,hot";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Belgrade,night,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Belgrade,night,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Belgrade,night,hot";
+		 images.put(tags, tags + extension);
+		 // **********************************
+				 
+		 // Berlin
+		 tags = "";
+		 tags = "Berlin,day,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Berlin,day,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Berlin,day,hot";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Berlin,night,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Berlin,night,hot";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Berlin,night,hot,fine";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Berlin,night,normal";
+		 images.put(tags, tags + extension);
+		 // **********************************
+		 
+		 // London
+		 tags = "";
+		 tags = "London,day,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "London,day,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "London,day,hot";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "London,night,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "London,night,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "London,night,hot";
+		 images.put(tags, tags + extension);
+		 // **********************************
+		 
+		// Miami
+		 tags = "";
+		 tags = "Miami,day,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Miami,day,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Miami,day,hot";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Miami,night,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Miami,night,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Miami,night,hot";
+		 images.put(tags, tags + extension);
+		// **********************************
+		 
+		// Paris
+		 tags = "";
+		 tags = "Paris,day,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Paris,day,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Paris,day,hot";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Paris,night,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Paris,night,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Paris,night,hot";
+		 images.put(tags, tags + extension);
+		 // **********************************
+		 
+		// Munich
+		 tags = "";
+		 tags = "Munich,day,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Munich,day,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Munich,day,hot";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Munich,night,cold";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Munich,night,normal";
+		 images.put(tags, tags + extension);
+		 tags = "";
+		 tags = "Munich,night,hot";
+		 images.put(tags, tags + extension);
+		 // **********************************
+		 
+		 
+		 
+		 
+		
 	    
 //	     printTree(images);
 	    
@@ -119,7 +217,7 @@ public class FillApp {
 //	}
 	
 	public void fillCarouselImg() {
-		for (int i = 1; i < 6; i++) {
+		for (int i = 1; i < 7; i++) {
 			CarouselPack carouselPack = new CarouselPack();
 			carouselPack.setIndex(i);
 			carouselPack.setSummer("summer.jpg");

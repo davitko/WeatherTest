@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,8 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
 
+import netgloo.Validation.CityValidator;
 import netgloo.com.java.File.FileFn;
 import netgloo.com.java.Integer.IntegerFn;
+import netgloo.com.java.String.StringFn;
 import netgloo.com.java.Time.TimeFn;
 import netgloo.models.CarouselPack;
 import netgloo.models.City;
@@ -49,6 +53,8 @@ public class IndexController {
 
 	public City lastCity;
 	public City detailCity;
+	public CityTimes detailCityTime;
+	public CityTimes cityTimes;
 
 	@Autowired
 	CityServices cityServices;
@@ -56,13 +62,24 @@ public class IndexController {
 	FillApp fillApp;
 	@Autowired
 	TimeFn timeFn;
-
+	@Autowired
+	StringFn stringFn;
 
 	public IndexController() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	@RequestMapping(value = {"/"}, method = RequestMethod.GET)	
+	public String index(Model model) {
+		IntegerFn integerFn = new IntegerFn(); 
+		Integer carouselIndex = integerFn.getRandomNumberInRange(0, 5);
+		CarouselPack carouselPack = fillApp.carouselImg.get(carouselIndex);
+		model.addAttribute("carouselPack", carouselPack);
+
+		return "index";
+	}
+	
 	/**
 	 * 
 	 * @param model
@@ -70,9 +87,10 @@ public class IndexController {
 	 * view resolver(see spring-servlet.xml above) to form the real view file name.
 	 */
 	//	@RequestMapping(method = RequestMethod.GET, produces = "text/html;charset=UTF-8")	
-	@RequestMapping(method = RequestMethod.GET)	
-	public String index(Model model) {
-		model.addAttribute("cities", cityServices.findAll());
+	@RequestMapping(value = {"/addCity"}, method = RequestMethod.GET)	
+	public String addCity(Model model) {
+//		model.addAttribute("cities", cityServices.findAll());
+		model.addAttribute("cities", cityServices.findAllSoft());
 		System.out.println("@index: Found " + cityServices.count());
 
 		//		City lastCity = cityServices.getLast();
@@ -89,11 +107,11 @@ public class IndexController {
 		//		model.addAttribute("weatherBg", weatherBg);
 
 		IntegerFn integerFn = new IntegerFn(); 
-		Integer carouselIndex = integerFn.getRandomNumberInRange(0, 4);
+		Integer carouselIndex = integerFn.getRandomNumberInRange(0, 5);
 		CarouselPack carouselPack = fillApp.carouselImg.get(carouselIndex);
 		model.addAttribute("carouselPack", carouselPack);
 
-		return "index";
+		return "addCity";
 	}
 
 	@RequestMapping(value = {"/index"}, method = RequestMethod.GET)	
@@ -127,7 +145,7 @@ public class IndexController {
 
 		model.addAttribute("detailCity", detailCity);
 
-		CityTimes cityTimes = new CityTimes();
+		cityTimes = new CityTimes();
 		cityTimes.setDateTime(timeFn.fromUnixToSpecificString(detailCity.getDateTime().longValue(), "hh a"));
 		cityTimes.setSunrise(timeFn.fromUnixToSpecificString(detailCity.getSunrise().longValue(), "hh:mm"));
 		cityTimes.setSunset(timeFn.fromUnixToSpecificString(detailCity.getSunset().longValue(), "hh:mm"));
@@ -173,11 +191,32 @@ public class IndexController {
 		//		model.addAttribute("weatherBg", weatherBg);
 		return "redirect:/details";
 	}
+	
+	@RequestMapping(value = {"/refresh/{id}"}, method = RequestMethod.GET)	
+	public String refresh(@PathVariable("id") long id, Model model) {
+		detailCity = cityServices.findById(id);
+		detailCity = updateCityInformation(detailCity.getName());
+		cityServices.updateCity(detailCity);
+		model.addAttribute("detailCity", detailCity);
+		return "redirect:/details";
+	}
 
 	@RequestMapping("/remove/{id}")
 	public String removeCity(@PathVariable("id") long id){
 		cityServices.delete(id);
-		return "redirect:/";
+		return "redirect:/addCity";
+	}
+	
+	@RequestMapping("/softRemove/{id}")
+	public String softRemoveCity(@PathVariable("id") long id){
+		cityServices.softDelete(id);
+		return "redirect:/addCity";
+	}
+	
+	@RequestMapping("/refreshCity/{id}")
+	public String refreshCity(@PathVariable("id") long id){
+		
+		return "redirect:/details";
 	}
 
 
@@ -195,16 +234,28 @@ public class IndexController {
 	//		return "myJsp";
 	//	}
 	
-	@RequestMapping(value ="/add", method = RequestMethod.GET)
-	@ResponseStatus(value=HttpStatus.OK)
-	public String addCityGet(Model model) throws IOException {
-		return "redirect:/";
-	}
+//	@RequestMapping(value ="/addCity/add", method = RequestMethod.GET)
+//	@ResponseStatus(value=HttpStatus.OK)
+//	public String addCityGet(Model model) throws IOException {
+//		return "addCity";
+//	}
 
-	@RequestMapping(value ="/add", method = RequestMethod.POST)
-	@ResponseStatus(value=HttpStatus.OK)
+	@RequestMapping(value ="/addCity/add", method = RequestMethod.POST)
+//	@ResponseStatus(value=HttpStatus.OK)
 	public String addCity(@ModelAttribute("city") City city, BindingResult result, Model model) throws IOException {
 		//		String cityName = "Belgrade";
+		
+		CityValidator cityValidator = new CityValidator();
+		cityValidator.validate(city, result);
+		
+		if (result.hasErrors()){
+	          // do something
+			return "index";
+	        }
+	        else {
+	          // do something else
+	        }
+		
 		String cityName = city.getName();
 		System.out.println("@addCity:: City name: " + cityName);
 		if (cityName != null) {
@@ -214,23 +265,32 @@ public class IndexController {
 						City newCity = getCityInformation(cityName);
 						//			model.addAttribute("newCity", newCity);
 					}else {
-						System.out.println("This City already exist!");
+						if (cityServices.isSoftDeleted(cityName)) {
+							System.out.println("This City is soft deleted from History!");
+						}else {
+							System.out.println("This City already exist in History!");							
+						}
 					}
 				}else {
 					System.out.println("This City doesn't exist on Weather Map!");
+//					return "redirect:/addCity";
 				}
 			}
 			catch (Exception e) {
 				// TODO: handle exception
 				System.out.println("@addCity: Error!");
 				e.printStackTrace();
+//				return "redirect:/addCity";
 			}
 
 		}else {
 			System.out.println("Internal problem City is null!");
+//			return "redirect:/addCity";
 		}
-
-		return "redirect:/index";
+		
+		model.addAttribute("cities", cityServices.findAllSoft());
+		return "redirect:/addCity";
+//		return "redirect:index";
 	}
 
 
@@ -257,14 +317,47 @@ public class IndexController {
 			tmpCity.setWind_speed(result.getWind().getSpeed().toString());
 			tmpCity.setDateTime(result.getDt());
 			cityServices.create(tmpCity);
-
 			//	    System.out.println(result);
 			System.out.println(result.toString());
 		}catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("@getCityInformation: Error occured!");
 		}
-
+		return tmpCity;
+	}
+	
+	public City updateCityInformation(String cityName)
+	{
+		String uri = openWeatherURL + "q=" + cityName + "&units=" + units + "&language=" + language + "&appid=" + APPID;
+		RestTemplate restTemplate = new RestTemplate();
+		//	    String result = restTemplate.getForObject(uri, String.class);
+		OpenWeatherMapObject result = restTemplate.getForObject(uri, OpenWeatherMapObject.class);
+		City tmpCity = new City();
+		try {
+			tmpCity.setCountry(result.getSys().getCountry());
+			tmpCity.setDeleted(false);
+			tmpCity.setHumidity(result.getMain().getHumidity().toString());
+			tmpCity.setName(result.getName());
+			tmpCity.setLatitude(result.getCoord().getLat());
+			tmpCity.setLongitude(result.getCoord().getLon());
+			tmpCity.setPressure(result.getMain().getPressure().toString());
+			tmpCity.setServerid(result.getId());
+			tmpCity.setSunrise(result.getSys().getSunrise());
+			tmpCity.setSunset(result.getSys().getSunset());
+			tmpCity.setTemperature(result.getMain().getTemp().toString());
+			tmpCity.setVisibility(result.getVisibility().toString());
+			tmpCity.setWind_speed(result.getWind().getSpeed().toString());
+			tmpCity.setDateTime(result.getDt());
+//			detailCityTime.setDateTime(timeFn.fromUnixToDate(result.getDt().longValue()).toString());
+//			detailCityTime.setSunrise(timeFn.fromUnixToDate(result.getSys().getSunrise().longValue()).toString());
+//			detailCityTime.setSunset(timeFn.fromUnixToDate(result.getSys().getSunset().longValue()).toString());
+//			cityServices.create(tmpCity);
+			//	    System.out.println(result);
+			System.out.println(result.toString());
+		}catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("@getCityInformation: Error occured!");
+		}
 		return tmpCity;
 	}
 
@@ -478,6 +571,38 @@ public class IndexController {
 			String value= (String) map.get(key);
 			System.out.println("At key= "+ key+ ", the value is "+ value);
 		}
+	}
+	
+	@RequestMapping("/stringTestingNish")
+	public void stringTestingNish() {
+		String string1 = "Niš";
+		String string2 = "Nis";
+		
+		System.out.println("similarityOfStringsDamerauLevenshtein: " + stringFn.similarityOfStringsDamerauLevenshtein(string1, string2));
+		System.out.println("similarityOfStringsJaroWinkler: " + stringFn.similarityOfStringsJaroWinkler(string1, string2));
+		System.out.println("similarityOfStringsLevenshtein: " + stringFn.similarityOfStringsLevenshtein(string1, string2));
+		System.out.println("similarityOfStringsMetricLongestCommonSubsequence: " + stringFn.similarityOfStringsMetricLongestCommonSubsequence(string1, string2));
+		System.out.println("similarityOfStringsNGram: " + stringFn.similarityOfStringsNGram(string1, string2));
+		System.out.println("similarityOfStringsNormalizedLevenshtein: " + stringFn.similarityOfStringsNormalizedLevenshtein(string1, string2));
+		System.out.println("similarityOfStringsOptimalStringAlignment: " + stringFn.similarityOfStringsOptimalStringAlignment(string1, string2));
+		System.out.println("similarityOfStringsQGram: " + stringFn.similarityOfStringsQGram(string1, string2));
+		System.out.println("simpleStringSimilarity: " + stringFn.simpleStringSimilarity(string1, string2));
+	}
+	
+	@RequestMapping("/stringTestingMunich")
+	public void stringTestingMunich() {
+		String string1 = "Munich";
+		String string2 = "München";
+		
+		System.out.println("similarityOfStringsDamerauLevenshtein: " + stringFn.similarityOfStringsDamerauLevenshtein(string1, string2));
+		System.out.println("similarityOfStringsJaroWinkler: " + stringFn.similarityOfStringsJaroWinkler(string1, string2));
+		System.out.println("similarityOfStringsLevenshtein: " + stringFn.similarityOfStringsLevenshtein(string1, string2));
+		System.out.println("similarityOfStringsMetricLongestCommonSubsequence: " + stringFn.similarityOfStringsMetricLongestCommonSubsequence(string1, string2));
+		System.out.println("similarityOfStringsNGram: " + stringFn.similarityOfStringsNGram(string1, string2));
+		System.out.println("similarityOfStringsNormalizedLevenshtein: " + stringFn.similarityOfStringsNormalizedLevenshtein(string1, string2));
+		System.out.println("similarityOfStringsOptimalStringAlignment: " + stringFn.similarityOfStringsOptimalStringAlignment(string1, string2));
+		System.out.println("similarityOfStringsQGram: " + stringFn.similarityOfStringsQGram(string1, string2));
+		System.out.println("simpleStringSimilarity: " + stringFn.simpleStringSimilarity(string1, string2));
 	}
 
 }

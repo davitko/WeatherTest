@@ -107,10 +107,9 @@
 
 	</div>
 
-	<div class="title animated bounceIn">
+	<div class="title-index animated bounceIn">
 		<div class="row ">
-			<div
-				class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+			<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
 				<h1>Welcome to weather map</h1>
 			</div>
 		</div>
@@ -137,106 +136,35 @@
 <!-- 	</div> -->
 
 	<!-- Page Content -->
-	<div class="container-fluid ">
+	<div class="container-fluid-index ">
 		<div class="addCity animated bounceIn">
 			<div class="row">
 				<div class="col-lg-12 col-md-12 ">
-					<c:url var="addAction" value="/add"></c:url>
-					<%-- <form:form action="${addAction}" commandName="warehouse" method="POST"> --%>
-<!-- 					<form role="form" -->
-<%-- 						action="${addAction}?${_csrf.parameterName}=${_csrf.token}" --%>
-<!-- 						commandName="city" method="POST"> -->
-						<form role="form" action="${addAction}"commandName="city" method="POST">
-						<div class="row">
 							<div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-12">
-								<div class="form-group">
-									<%-- <form:input path="name" type="text" class="form-control addWarehouseStyle" id="message" placeholder="Naziv" />   --%>
-									<input class="form-control addWarehouseStyle" name="name"
-										id="message" placeholder="City Name" type="text"
-										value="${city.name}" />
-									<p class="help-block text-danger"></p>
-								</div>
-							</div>
 							<div class="clearfix"></div>
 							<div class="col-lg-12 text-center">
-								<div id="success"></div>
-								<input type="submit"
-									class="btn btn-xl submit-add addWarehouseStyle" value="add" />
+<!-- 								<div id="success"></div> -->
+<%-- 								<a href="<%=request.getContextPath()%>/addCity" />"><input type="button" --%>
+<!-- 									class="btn btn-xl submit-add  add-index" value="Add City" /></a> -->
+									
+									<a href="<%=request.getContextPath()%>/addCity"/>
+    <button type="button" class="btn btn-default btn-xl submit-add  add-index" aria-haspopup="true" aria-expanded="false">
+		<i class="fa fa-plus-square" aria-hidden="true"></i> Add City</button></a>
+		
+		<a href="<%=request.getContextPath()%>/stringTestingMunich"/>
+    <button type="button" class="btn btn-default btn-xl submit-add  add-index" aria-haspopup="true" aria-expanded="false">
+		<i class="fa fa-plus-square" aria-hidden="true"></i> stringTesting</button></a>
+		
 							</div>
 						</div>
-					</form>
+					
 
 				</div>
 			</div>
 
 
-
-
-
 		</div>
-		<div class="delimiter">
-			<div class="row ">
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-					<!--                        <img src="img/line.png" class="delimiter-img">-->
-					<p></p>
-				</div>
-			</div>
-		</div>
-		<div class="table-responsive">
-			<div class="row table-row">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<table id="example"
-						class="table table-bordered table-striped table-condensed table-hover"
-						cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th>City</th>
-								<th>Temperature</th>
-								<th>Humidity</th>
-								<th>Pressure</th>
-								<th>Details</th>
-								<th>Remove</th>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<th>City</th>
-								<th>Temperature</th>
-								<th>Humidity</th>
-								<th>Pressure</th>
-								<th>Details</th>
-								<th>Remove</th>
-							</tr>
-						</tfoot>
-						<tbody>
-							<c:forEach items="${cities}" var="city">
-								<tr>
-									<td>${city.name}</td>
-									<td>${city.temperature}&#8451;</td>
-									<td>${city.humidity}%</td>
-									<td>${city.pressure}mb</td>
-									<td><a href="<c:url value="/details/${city.id}" />"><button
-												type="button" class="btn btn-success" aria-haspopup="true"
-												aria-expanded="false">
-												<i class="fa fa-info"></i>
-											</button></a></td>
-									<td><a
-										href="<c:url value="/remove/${city.id}" />"><button
-												type="button" class="btn btn-danger " aria-haspopup="true"
-												aria-expanded="false">
-												<i class="fa fa-trash-o"></i>
-											</button></a></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-
-		<hr>
-
-
+		
 
 	</div>
 	<!-- /.container -->

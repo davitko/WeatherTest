@@ -44,7 +44,9 @@
 
 <!--    Animate.css-->
 <link href="${contextPath}/resources/css/animate.css" rel="stylesheet">
-<title>Insert title here</title>
+<!-- Font Awesome -->
+<link href="<%=request.getContextPath()%>/resources/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -54,38 +56,70 @@
 	</div>
 
 	<div class="detail-title animated bounceIn">
-        <h1><c:out value="${detailCity.name}"/></h1>
-    </div>
+		<h1>
+			<c:out value="${detailCity.name}" />
+		</h1>
+	</div>
 
-    <div class="informations animated bounceIn">
-        <div class="row ">
-            <div class="col-lg-4 col-md-6 col-sm-7">
-                <div class="title-temperature-details animated bounceIn">
-                    <p><c:out value="${detailCity.temperature}"/> &#8451;</p>
-                </div>
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1">
-                <div class="title-time animated bounceIn">
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-5 col-sm-4">
-                <div class="title-time-details animated bounceIn">
-                    <p>Humidity: <c:out value="${detailCity.humidity}"/>%</p>
-                    <p>Pressure: <c:out value="${detailCity.pressure}"/> mb</p>
-                    <p><c:out value="${cityTimes.dateTime}"/></p>
-                </div>
-            </div>
+	<div class="informations animated bounceIn">
+		<div class="row ">
+			<div class="col-lg-4 col-md-6 col-sm-7">
+				<div class="title-temperature-details animated bounceIn">
+					<p>
+						<c:out value="${detailCity.temperature}" />
+						&#8451;
+					</p>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1">
+				<div class="title-time animated bounceIn"></div>
+			</div>
+			<div class="col-lg-4 col-md-5 col-sm-4">
+				<div class="title-time-details animated bounceIn">
+					<p>
+						Humidity:
+						<c:out value="${detailCity.humidity}" />
+						%
+					</p>
+					<p>
+						Pressure:
+						<c:out value="${detailCity.pressure}" />
+						mb
+					</p>
+					<p>
+						<c:out value="${detailCity.dateTime}" />
+					</p>
+				</div>
+			</div>
 
-        </div>
-    </div>
-    
-    <a href="<%=request.getContextPath()%>/" />">
-    <button type="button" class="btn btn-default btn-xl back-btn" aria-haspopup="true" aria-expanded="false" aria-hidden="true">
-		<i class="fa fa-angle-left"></i>Back</button></a>
-							
-    
+		</div>
+	</div>
 
-	
+	<div class="row details-buttons">
+		<div class=col-lg-3>
+			<a href="<c:url value="/refresh/${detailCity.id}" />">
+			<button type="button" class="btn btn-default btn-xl back-btn"
+				aria-haspopup="true" aria-expanded="false">
+				<i class="fa fa-refresh" aria-hidden="true"></i>
+			</button>
+			</a>
+		</div>
+		<div class=col-lg-3>
+			<a href="<%=request.getContextPath()%>/addCity" />
+			<button type="button" class="btn btn-default btn-xl back-btn"
+				aria-haspopup="true" aria-expanded="false">
+				<i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+			</button>
+			</a>
+		</div>
+	</div>
+
+
+
+
+
+
+
 	<!-- Footer -->
 	<footer>
 	<div class="row">
