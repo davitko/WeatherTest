@@ -14,6 +14,7 @@ import java.time.format.FormatStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -142,6 +143,19 @@ public class TimeFn {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		String date = sdf.format(unix);
 		return date;
+	}
+	
+	/**
+	 * In file TimeZones.txt we have list of all poisble Time Zones
+	 * @param unix
+	 * @param format
+	 * @return
+	 */
+	public String fromUnixToSpecificString(Double unix, String format) {
+		SimpleDateFormat gmt0 = new SimpleDateFormat(format);
+		gmt0.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+		Date inputDate = fromUnixToDate(unix.longValue());
+		return gmt0.format(inputDate);
 	}
 
 	/**

@@ -87,7 +87,7 @@
 						mb
 					</p>
 					<p>
-						<c:out value="${detailCity.dateTime}" />
+						<c:out value="${cityTimes.dateTime}" /> GMT0
 					</p>
 				</div>
 			</div>

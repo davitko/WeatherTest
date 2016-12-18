@@ -184,6 +184,20 @@ body {
 		0 #000, 1px 1px 0 #000;
 }
 
+.recommended-cities {
+    color: #222;
+    line-height: 16px;
+    font-size: 15px;
+    font-family: 'Muli', sans-serif;
+    font-style: italic;
+    text-align: left;
+}
+
+.recommended-cities h4 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
 .addCity {
 	text-align: left;
 	margin: 10px 0;
@@ -210,6 +224,13 @@ body {
 .table-row {
 	/* 	max-width: 100%; */
 	
+}
+
+.validation-messaage {
+	padding-left: 10px;
+    margin: 5px 0;
+    font-size: 15px;
+    font-weight: 600;
 }
 
 .submit-add {

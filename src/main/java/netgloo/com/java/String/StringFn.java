@@ -4,9 +4,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -550,11 +557,15 @@ You almost always want to useObjects.equals(). In the rare situation where you k
 	// ##########################################################################################################
 	
 	/**
-	 * Jaro-Winkler is a string edit distance that was developed in the area of record linkage (duplicate detection) (Winkler, 1990). The Jaro–Winkler distance metric is designed and best suited for short strings such as person names, and to detect typos.
+	 * Jaro-Winkler is a string edit distance that was developed in the area of record linkage (duplicate detection) 
+	 * (Winkler, 1990). The Jaro–Winkler distance metric is designed and best suited for short strings such as person 
+	 * names, and to detect typos.
 
-Jaro-Winkler computes the similarity between 2 strings, and the returned value lies in the interval [0.0, 1.0]. It is (roughly) a variation of Damerau-Levenshtein, where the substitution of 2 close characters is considered less important then the substitution of 2 characters that a far from each other.
+	Jaro-Winkler computes the similarity between 2 strings, and the returned value lies in the interval [0.0, 1.0]. 
+	It is (roughly) a variation of Damerau-Levenshtein, where the substitution of 2 close characters is considered 
+	less important then the substitution of 2 characters that a far from each other.
 
-The distance is computed as 1 - Jaro-Winkler similarity.
+	The distance is computed as 1 - Jaro-Winkler similarity.
 
 		Testing:
 		// substitution of s and t
@@ -670,6 +681,136 @@ Directly compute the distance between strings:
 	
 	// ##########################################################################################################
 	
+	/**
+	 * 
+	 * @param inputList
+	 * @param startString
+	 * @return
+	 */
+	public List<String> startsWith(List<String> inputList, String startString) {
+		List<String> resultList = new ArrayList<String>();
+		for (String str : inputList) {
+			if (str.startsWith(startString)) 
+				resultList.add(str);
+		}
+		return resultList;
+	}
+	
+	
+	// ##########################################################################################################
+	
+	/**
+	 * Testing:
+	 * List<String> countries = Arrays.asList("Slovensko", "Švédsko", "Turecko");
+
+Collections.sort(countries);
+System.out.println(countries); // outputs [Slovensko, Turecko, Švédsko]
+
+Collections.sort(countries, Collator.getInstance(new Locale("sk")));
+System.out.println(countries); // outputs [Slovensko, Švédsko, Turecko]
+
+	 * @param inputList
+	 * @param languageCode: "sk", "en" (English), "ja" (Japanese), "kok" (Konkani), "Latn" (Latin), "Cyrl" (Cyrillic), "US" (United States), "FR" (France), "029" (Caribbean)
+	 * @return
+	 */
+	public List<String> sortListByLocale(List<String> inputList, String languageCode) {
+		List<String> resultList = new ArrayList<String>();
+		resultList = inputList;
+		Collections.sort(resultList, Collator.getInstance(new Locale(languageCode)));
+		return resultList;
+	}
+	
+	
+	// ##########################################################################################################
+	
+	/**
+	 * This is function recommended for short strings becouse of using JeroWinker algorithm for 
+	 * string similarity which is good for short strings.
+	 * @param inputList
+	 * @param inputString
+	 * @return
+	 */
+	public List<String> recommendSimilarFromList(List<String> inputList, String inputString) {
+		TreeMap<Integer, String> resultMap = new TreeMap<Integer, String>(Collections.reverseOrder());
+		List<String> resultList = new ArrayList<String>();
+		List<String> shorterInputList = new ArrayList<String>();
+		String firstLetter  = "";
+		Double similarity;
+		if (inputString.length() < 4)
+			firstLetter = inputString.substring(0, 1);
+		if (inputString.length() < 6)
+			firstLetter = inputString.substring(0, 2);
+		if (inputString.length() < 8)
+			firstLetter = inputString.substring(0, 3);
+		if (inputString.length() >= 8)
+			firstLetter = inputString.substring(0, 4);
+		shorterInputList = startsWith(inputList, firstLetter);
+//		shorterInputList.forEach(item -> System.out.println(item));
+		for (String str : shorterInputList) {
+			similarity = similarityOfStringsJaroWinkler(str, inputString);
+//			System.out.println(str + " - " + similarity);
+			if (similarity > 0.6) {
+				Double tmpSimilarity = similarity * 100;
+				resultMap.put(Integer.valueOf(tmpSimilarity.intValue()), str);
+//				resultList.add(str);
+//				System.out.println(str + " - " + similarity);
+			}
+		}
+//		resultList.forEach(item -> System.out.println(item));
+		
+		
+		/* Display content using Iterator*/
+	      Set set = resultMap.entrySet();
+	      Iterator iterator = set.iterator();
+	      while(iterator.hasNext()) {
+	         Map.Entry mentry = (Map.Entry)iterator.next();
+	         System.out.print("key is: "+ mentry.getKey() + " & Value is: ");
+	         System.out.println(mentry.getValue());
+	         resultList.add(mentry.getValue().toString());
+	      }
+	      
+		if (resultList.size() <= 3)
+			return resultList;
+		if (resultList.size() <= 5)
+			return resultList.subList(0, 3);
+		if (resultList.size() <= 10)
+			return resultList.subList(0, 4);
+		if (resultList.size() > 10)
+			return resultList.subList(0, 5);
+		return resultList;
+	}
+	
+	// ##########################################################################################################
+	
+	/**
+	 * 
+	 * @param inputString
+	 * @return
+	 */
+	public String capitalizeFirstLetter(String inputString) {
+		return inputString.substring(0, 1).toUpperCase() + inputString.substring(1);
+	}
+	
+	// ##########################################################################################################
+	
+	public String capitalizeEveryWordFirstLetter(String word){
+        String[] words = word.split(" ");
+        StringBuilder sb = new StringBuilder();
+        if (words[0].length() > 0) {
+            sb.append(Character.toUpperCase(words[0].charAt(0)) + words[0].subSequence(1, words[0].length()).toString().toLowerCase());
+            for (int i = 1; i < words.length; i++) {
+                sb.append(" ");
+                sb.append(Character.toUpperCase(words[i].charAt(0)) + words[i].subSequence(1, words[i].length()).toString().toLowerCase());
+            }
+        }
+        return  sb.toString();
+    }
+	
+	// ##########################################################################################################
+	
+	
+	
+	// ##########################################################################################################
 	
 	
 	
@@ -683,19 +824,104 @@ Directly compute the distance between strings:
 	// ##########################################################################################################
 	
 	
+	
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+	
+	
 	// ##########################################################################################################
 	
 	
 	
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+	
+	
 	// ##########################################################################################################
 	
 	
 	
-	// ##########################################################################################################
-	
-	
-	// ##########################################################################################################
-	
-	
-	// ##########################################################################################################
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
+		
+		
+		
+		// ##########################################################################################################
 }

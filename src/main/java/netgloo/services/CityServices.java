@@ -16,13 +16,13 @@ import netgloo.repository.CityRepository;
 @Service
 @RequestMapping("/city")
 public class CityServices {
-	
+
 	@Autowired
 	ArrayFn arrayFn;
 	@Autowired
 	CityRepository cityRepository;
-	
-	
+
+
 	public CityServices() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -36,7 +36,7 @@ public class CityServices {
 		listOfAll = arrayFn.IterableToList(cityRepository.findAll());
 		return listOfAll;
 	}
-	
+
 	/**
 	 * Find all city which is not Soft deleted
 	 * @return
@@ -54,7 +54,7 @@ public class CityServices {
 		}
 		return result;
 	}
-	
+
 	@RequestMapping("/Count")
 	@ResponseBody
 	public Integer count() {
@@ -62,7 +62,7 @@ public class CityServices {
 		listOfAll = arrayFn.IterableToList(cityRepository.findAll());
 		return listOfAll.size();
 	}
-	
+
 	@RequestMapping("/getLast")
 	@ResponseBody
 	public City getLast() {
@@ -71,7 +71,7 @@ public class CityServices {
 		City lastCity = listOfAll.get(listOfAll.size() - 1);
 		return lastCity;
 	}
-	
+
 	@RequestMapping("/id")
 	@ResponseBody
 	public City findById(long id) {
@@ -79,15 +79,15 @@ public class CityServices {
 		object = cityRepository.findOne(id);
 		return object;
 	}
-	
+
 	@RequestMapping("/name")
 	@ResponseBody
-	public City findByName(String name) {
-		City object = new City();
+	public List<City> findByName(String name) {
+		List<City> object = new ArrayList<City>();
 		object = cityRepository.findByName(name);
 		return object;
 	}
-	
+
 	@RequestMapping("/create")
 	@ResponseBody
 	public String create(String name, Double serverid, String country, String temperature, String humidity, String pressure,
@@ -103,7 +103,7 @@ public class CityServices {
 		}
 		return "User succesfully created new City! (id = " + object.getId() + ")";
 	}
-	
+
 	@RequestMapping("/createObject")
 	@ResponseBody
 	public String create(City tmpCity) {
@@ -130,7 +130,7 @@ public class CityServices {
 		}
 		return "City succesfully deleted!";
 	}
-	
+
 	@RequestMapping("/softDelete")
 	@ResponseBody
 	public String softDelete(long id) {
@@ -172,13 +172,13 @@ public class CityServices {
 		}
 		return "City succesfully updated!";
 	}
-	
+
 	@RequestMapping("/updateCity")
 	@ResponseBody
-	public String updateCity(City city) {
+	public void updateCity(City city) {
 		try {
 			City object = new City();
-			object = cityRepository.findOne(city.getId());
+			object = findById(city.getId());
 			object.setName(city.getName());
 			object.setServerid(city.getServerid());
 			object.setCountry(city.getCountry());
@@ -195,25 +195,29 @@ public class CityServices {
 			cityRepository.save(object);
 		}
 		catch (Exception ex) {
-			return "Error updating the City: " + ex.toString();
+			ex.printStackTrace();
+			System.out.println("Error updating the City: " + ex.toString());
 		}
-		return "City succesfully updated!";
+		System.out.println("City succesfully updated!");
 	}
-	
+
 	@RequestMapping("/updateCity_Deleted")
 	@ResponseBody
 	public String updateCity_Deleted(String name, Boolean deleted) {
 		try {
-			City object = cityRepository.findByName(name);
-			object.setDeleted(deleted);
-			cityRepository.save(object);
+			List<City> object = new ArrayList<City>();
+			object = cityRepository.findByName(name);
+			for (City ct : object) {
+				ct.setDeleted(deleted);
+				cityRepository.save(ct);
+			}
 		}
 		catch (Exception ex) {
 			return "Error updating the City: " + ex.toString();
 		}
 		return "City succesfully updated!";
 	}
-	
+
 	@RequestMapping("/updateSoftDeleted")
 	@ResponseBody
 	public String updateCitySoftDeleted(long id, Boolean deleted) {
@@ -227,14 +231,14 @@ public class CityServices {
 		}
 		return "City succesfully updated!";
 	}
-	
+
 	@RequestMapping("/isExistByName")
 	@ResponseBody
 	public boolean isExistByName(String name) {
-		City object = null;
+		List<City> object = new ArrayList<City>();
 		try {
 			object = cityRepository.findByName(name);
-			if (object == null)
+			if (object == null || object.size() == 0)
 				return false;
 			else 
 				return true;
@@ -243,45 +247,51 @@ public class CityServices {
 			return false;
 		}
 	}
-	
+
 	@RequestMapping("/isSoftDeletedByName")
 	@ResponseBody
 	public boolean isSoftDeleted(String name) {
-		City object = null;
+		List<City> object = new ArrayList<City>();
 		try {
 			object = cityRepository.findByName(name);
 			if (object == null)
 				return false;
 			else 
-				if (object.getDeleted()) {
-					return true;
-				}else {
-					return false;
+				for (City ct : object) {
+					if (ct.getDeleted()) {
+						return true;
+					}else {
+						return false;
+					}
 				}
 		}
 		catch (Exception ex) {
 			return false;
 		}
+		return false;
 	}
-	
+
 	@RequestMapping("/isExistOrSoftDeletedByName")
 	@ResponseBody
 	public boolean isExistOrSoftDeletedByName(String name) {
-		City object = null;
+		List<City> object = new ArrayList<City>();
 		try {
 			object = cityRepository.findByName(name);
 			if (object == null)
 				return false;
 			else 
-				if (object.getDeleted()) {
-					return true;
-				}else {
-					return false;
+				for (City ct : object) {
+					if (ct.getDeleted()) {
+						return true;
+					}else {
+						return false;
+					}
 				}
 		}
 		catch (Exception ex) {
 			return false;
 		}
+		return false;
 	}
 
 }

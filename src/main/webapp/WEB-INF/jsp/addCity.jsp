@@ -45,7 +45,9 @@
 <!--    Animate.css-->
 <link href="${contextPath}/resources/css/animate.css" rel="stylesheet">
 <!-- Font Awesome -->
-<link href="<%=request.getContextPath()%>/resources/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link
+	href="<%=request.getContextPath()%>/resources/fonts/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet">
 
 
 <title>Insert title here</title>
@@ -109,31 +111,32 @@
 
 	<div class="title animated bounceIn">
 		<div class="row ">
-			<div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+			<div
+				class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
 				<h1>Welcome to weather map</h1>
 			</div>
 		</div>
 	</div>
 
-<!-- 	<div class="informations animated bounceIn"> -->
-<!-- 		<div class="row "> -->
-<!-- 			<div class="col-lg-2 col-md-4 col-sm-6"> -->
-<!-- 				<div class="title-temperature animated bounceIn"> -->
-<!-- 					<p>4 &#8451;</p> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
-<!-- 			<div class="col-lg-2 col-md-4 col-sm-6"> -->
-<!-- 				<div class="title-cityName animated bounceIn"> -->
-<!-- 					<p>Berlin</p> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
-<!-- 			<div class="col-lg-2 col-md-4 col-sm-6"> -->
-<!-- 				<div class="title-time animated bounceIn"> -->
-<!-- 					<p>03 a.m.</p> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
+	<!-- 	<div class="informations animated bounceIn"> -->
+	<!-- 		<div class="row "> -->
+	<!-- 			<div class="col-lg-2 col-md-4 col-sm-6"> -->
+	<!-- 				<div class="title-temperature animated bounceIn"> -->
+	<!-- 					<p>4 &#8451;</p> -->
+	<!-- 				</div> -->
+	<!-- 			</div> -->
+	<!-- 			<div class="col-lg-2 col-md-4 col-sm-6"> -->
+	<!-- 				<div class="title-cityName animated bounceIn"> -->
+	<!-- 					<p>Berlin</p> -->
+	<!-- 				</div> -->
+	<!-- 			</div> -->
+	<!-- 			<div class="col-lg-2 col-md-4 col-sm-6"> -->
+	<!-- 				<div class="title-time animated bounceIn"> -->
+	<!-- 					<p>03 a.m.</p> -->
+	<!-- 				</div> -->
+	<!-- 			</div> -->
+	<!-- 		</div> -->
+	<!-- 	</div> -->
 
 	<!-- Page Content -->
 	<div class="container-fluid ">
@@ -142,22 +145,36 @@
 				<div class="col-lg-12 col-md-12 ">
 					<c:url var="addAction" value="/addCity/add"></c:url>
 					<%-- <form:form action="${addAction}" commandName="warehouse" method="POST"> --%>
-<!-- 					<form role="form" -->
-<%-- 						action="${addAction}?${_csrf.parameterName}=${_csrf.token}" --%>
-<!-- 						commandName="city" method="POST"> -->
-<%-- 						<form role="form" action="${addAction}"commandName="city" method="POST"> --%>
-						<form role="form" action="${addAction}"commandName="city" method="POST">
+					<!-- 					<form role="form" -->
+					<%-- 						action="${addAction}?${_csrf.parameterName}=${_csrf.token}" --%>
+					<!-- 						commandName="city" method="POST"> -->
+					<%-- 						<form role="form" action="${addAction}"commandName="city" method="POST"> --%>
+					<form role="form" action="${addAction}" commandName="city"
+						method="POST">
 						<div class="row">
-							<div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-12">
+							<div
+								class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-3 col-sm-5 col-sm-offset-2 col-xs-6">
 								<div class="form-group">
-									<%-- <form:input path="name" type="text" class="form-control addWarehouseStyle" id="message" placeholder="Naziv" />   --%>
 									<input class="form-control addCityStyle" name="name"
-										id="message" placeholder="City Name" type="text"
-										value="${city.name}" />
-										<div class="col-md-6 form-group ${requestScope['org.springframework.validation.BindingResult.obj'].hasFieldErrors()}">
-									<p class="help-block text-danger"></p>
+										id="message" placeholder="City Name" type="text" />
+									<p class="text-danger validation-messaage">
+										<c:out value="${validationCity.validationMessage}" />
+									</p>
 								</div>
 							</div>
+							<div
+								class="col-lg-3 col-lg-offset-1 col-md-4 col-md-offset-1 col-sm-5 col-xs-6 recommended-cities <c:if test="${validationCity.recommendedCities eq null}">hide</c:if> />">
+								<h4>Maybe you mean:</h4>
+								<c:forEach items="${validationCity.recommendedCities}"
+									var="recommendCity">
+									<a
+										href="<c:url value="/addRecommendedCity/${recommendCity}" />">
+										<div>${recommendCity}</div>
+									</a>
+								</c:forEach>
+
+							</div>
+
 							<div class="clearfix"></div>
 							<div class="col-lg-12 text-center">
 								<div id="success"></div>
@@ -169,10 +186,6 @@
 
 				</div>
 			</div>
-
-
-
-
 
 		</div>
 		<div class="delimiter">
@@ -192,6 +205,7 @@
 						<thead>
 							<tr>
 								<th>City</th>
+								<th>Country</th>
 								<th>Temperature</th>
 								<th>Humidity</th>
 								<th>Pressure</th>
@@ -202,6 +216,7 @@
 						<tfoot>
 							<tr>
 								<th>City</th>
+								<th>Country</th>
 								<th>Temperature</th>
 								<th>Humidity</th>
 								<th>Pressure</th>
@@ -213,16 +228,16 @@
 							<c:forEach items="${cities}" var="city">
 								<tr>
 									<td>${city.name}</td>
-									<td>${city.temperature} &#8451;</td>
-									<td>${city.humidity} %</td>
-									<td>${city.pressure} mb</td>
+									<td>${city.country}</td>
+									<td>${city.temperature}&#8451;</td>
+									<td>${city.humidity}%</td>
+									<td>${city.pressure}mb</td>
 									<td><a href="<c:url value="/details/${city.id}" />"><button
 												type="button" class="btn btn-success" aria-haspopup="true"
 												aria-expanded="false">
 												<i class="fa fa-info"></i>
 											</button></a></td>
-									<td><a
-										href="<c:url value="/softRemove/${city.id}" />"><button
+									<td><a href="<c:url value="/softRemove/${city.id}" />"><button
 												type="button" class="btn btn-danger " aria-haspopup="true"
 												aria-expanded="false">
 												<i class="fa fa-trash-o"></i>
@@ -272,6 +287,9 @@
 			interval : 10000
 		//changes the speed
 		})
+		$(document).ready(function() {
+			$('[data-toggle="popover"]').popover();
+		});
 	</script>
 
 

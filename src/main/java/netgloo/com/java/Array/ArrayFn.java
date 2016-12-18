@@ -31,6 +31,34 @@ Set<E>:
 A collection that contains no duplicate elements. More formally, sets contain no pair of elements e1 and e2 
 such that e1.equals(e2), and at most one null element. As implied by its name, this interface models the 
 mathematical set abstraction.
+
+Map<K,V>:
+Map tmpMap = new HashMap();
+The Map interface maps UNIQUE keys to values. A key is an object that you use to retrieve a value at a later date.
+A map cannot contain duplicate keys; each key can map to at most one value.
+The order of a map is defined as the order in which the iterators on the map's collection views return their elements. 
+Some map implementations, 
+like the TreeMap class, make specific guarantees as to their order; others, like the HashMap class, do not.
+
+TreeMap<K,V>:
+TreeMap tmpTreeMap = new TreeMap();
+*****************************************
+*The main difference between them is that HashMap is an unordered collection while TreeMap is sorted in the 
+*ascending order of its keys. TreeMap is unsynchronized collection class which 
+*means it is not suitable for thread-safe operations until unless synchronized explicitly.
+
+A TreeMap provides an efficient means of storing key/value pairs in sorted order, and allows rapid retrieval.
+You should note that, unlike a hash map, a tree map guarantees that its elements will be sorted in an ascending key order.
+
+The map is sorted according to the natural ordering of its keys, or by a Comparator provided at map creation time, 
+depending on which constructor is used.
+ordering maintained by a tree map, like any sorted map, and whether or not an explicit comparator is provided, must be 
+consistent with equals if this sorted map is to correctly implement the Map interface.
+
+Doubles shouldn't be used in HashMaps because they are difficult to compare for equality.
+The double values are generated a bunch of math, so the likelihood of a duplicate value is extremely low.
+
+
  */
 @Controller
 public class ArrayFn {
@@ -125,6 +153,8 @@ public class ArrayFn {
 		}
 		System.out.println();
 	}
+	
+	
 
 	/**
 	 * Determines the largest of three Comparable objects
@@ -328,6 +358,9 @@ public class ArrayFn {
         return result;
 
     }
+    
+    
+
 
 
 

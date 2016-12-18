@@ -14,8 +14,8 @@ import netgloo.models.City;
 @Transactional
 public interface CityRepository extends PagingAndSortingRepository<City, Long> {
 	
-	City findByName(String name);
-	City findByServerid(long serverid);
+	List<City> findByName(String name);
+	City findByServerid(Double serverid);
 	List<City> findByCountry(String country);
 	List<City> findByLongitude(Double longitude);
 	List<City> findByLatitude(Double latitude);

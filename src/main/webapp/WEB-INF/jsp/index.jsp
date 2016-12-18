@@ -146,14 +146,13 @@
 <!-- 								<div id="success"></div> -->
 <%-- 								<a href="<%=request.getContextPath()%>/addCity" />"><input type="button" --%>
 <!-- 									class="btn btn-xl submit-add  add-index" value="Add City" /></a> -->
-									
 									<a href="<%=request.getContextPath()%>/addCity"/>
     <button type="button" class="btn btn-default btn-xl submit-add  add-index" aria-haspopup="true" aria-expanded="false">
 		<i class="fa fa-plus-square" aria-hidden="true"></i> Add City</button></a>
 		
-		<a href="<%=request.getContextPath()%>/stringTestingMunich"/>
-    <button type="button" class="btn btn-default btn-xl submit-add  add-index" aria-haspopup="true" aria-expanded="false">
-		<i class="fa fa-plus-square" aria-hidden="true"></i> stringTesting</button></a>
+<%-- 		<a href="<%=request.getContextPath()%>/stringTesting"/> --%>
+<!--     <button type="button" class="btn btn-default btn-xl submit-add  add-index" aria-haspopup="true" aria-expanded="false"> -->
+<!-- 		<i class="fa fa-plus-square" aria-hidden="true"></i> stringTesting</button></a> -->
 		
 							</div>
 						</div>
@@ -199,6 +198,7 @@
 			interval : 10000
 		//changes the speed
 		})
+		
 	</script>
 
 
